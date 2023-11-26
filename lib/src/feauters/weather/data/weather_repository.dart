@@ -20,7 +20,7 @@ class WeatherRepository {
       location: location.name,
       condition: weather.weatherCode.toInt().toCondition,
       weatherCode: weather.weatherCode,
-      temperatureEntity: Temperature.fromJson({'value' : weather.temperature})
+      temperatureEntity: Temperature.fromJson(weather.temperature)
     );
   }
 }
