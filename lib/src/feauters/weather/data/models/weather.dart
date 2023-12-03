@@ -45,6 +45,10 @@ class Weather{
     return Weather(temperature: json["temperature"], condition: condition, location: json["temperature"].toString(), weatherCode: weatherCode.toDouble(), temperatureEntity: Temperature.fromJson(json["temperature"]));
   }
 
+  get time => null;
+
+  get iconCode => null;
+
   Weather copyWith ({double? temperature,
 WeatherCondition? condition,
 String? location,
