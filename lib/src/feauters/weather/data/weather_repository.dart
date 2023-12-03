@@ -2,26 +2,23 @@ import 'dart:async';
 import 'package:flutter_weather/src/feauters/weather/data/models/models.dart';
 import 'package:flutter_weather/src/feauters/weather/data/open_meteo/api_client.dart';
 
-
 class WeatherRepository {
   WeatherRepository({OpenMeteoApiClient? weatherApiClient})
       : _weatherApiClient = weatherApiClient ?? OpenMeteoApiClient();
 
   final OpenMeteoApiClient _weatherApiClient;
 
-  Future<Weather> getWeather(String city) async {
-    final location = await _weatherApiClient.locationSearch(city);
+  Future<Weather> getWeather(Location location) async {
     final weather = await _weatherApiClient.getWeather(
       latitude: location.latitude,
       longitude: location.longitude,
     );
     return Weather(
-      temperature: weather.temperature,
-      location: location.name,
-      condition: weather.weatherCode.toInt().toCondition,
-      weatherCode: weather.weatherCode,
-      temperatureEntity: Temperature.fromJson(weather.temperature)
-    );
+        temperature: weather.temperature,
+        location: location.name,
+        condition: weather.weatherCode.toInt().toCondition,
+        weatherCode: weather.weatherCode,
+        temperatureEntity: Temperature.fromJson(weather.temperature));
   }
 }
 
