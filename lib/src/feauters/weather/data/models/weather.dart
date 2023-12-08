@@ -1,15 +1,17 @@
 //part "weather.g.dart";
-enum TemperatureUnits{
+import 'package:flutter_weather/src/feauters/weather/service/get_weather_image_service.dart';
+
+enum TemperatureUnits {
   celsius,
   fahrenheit,
 }
 
-extension TemperatureUnitsX on TemperatureUnits{
+extension TemperatureUnitsX on TemperatureUnits {
   bool get isFahrenheit => this == TemperatureUnits.fahrenheit;
   bool get isCelsius => this == TemperatureUnits.celsius;
 }
 
-class Temperature{
+class Temperature {
   final double value;
 
   const Temperature({required this.value});
@@ -19,44 +21,64 @@ class Temperature{
   }
 }
 
-enum WeatherCondition{
+enum WeatherCondition {
   clear,
   rainy,
   cloudy,
   snowy,
+  foggy,
   unknown,
 }
 
-
-
-class Weather{
+class Weather {
   final double temperature;
   final WeatherCondition condition;
   final String location;
   final double weatherCode;
   final Temperature temperatureEntity;
 
-  const Weather({required this.temperature, required this.condition, required this.location, required this.weatherCode, required this.temperatureEntity});
+  const Weather(
+      {required this.temperature,
+      required this.condition,
+      required this.location,
+      required this.weatherCode,
+      required this.temperatureEntity});
 
   // factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);
   factory Weather.fromJson(Map<String, dynamic> json) {
     int weatherCode = json["weathercode"];
     final condition = weatherCode.toCondition;
-    return Weather(temperature: json["temperature"], condition: condition, location: json["temperature"].toString(), weatherCode: weatherCode.toDouble(), temperatureEntity: Temperature.fromJson(json["temperature"]));
+    return Weather(
+        temperature: json["temperature"],
+        condition: condition,
+        location: json["temperature"].toString(),
+        weatherCode: weatherCode.toDouble(),
+        temperatureEntity: Temperature.fromJson(json["temperature"]));
   }
 
   get time => null;
 
   get iconCode => null;
 
-  Weather copyWith ({double? temperature,
-WeatherCondition? condition,
-String? location,
-double? weatherCode,
-Temperature? temperatureEntity}){
-  return Weather(temperature: temperature ?? this.temperature, condition: condition ?? this.condition, location: location ?? this.location, weatherCode: weatherCode ?? this.weatherCode, temperatureEntity: temperatureEntity ?? this.temperatureEntity);
+  Weather copyWith(
+      {double? temperature,
+      WeatherCondition? condition,
+      String? location,
+      double? weatherCode,
+      Temperature? temperatureEntity}) {
+    return Weather(
+        temperature: temperature ?? this.temperature,
+        condition: condition ?? this.condition,
+        location: location ?? this.location,
+        weatherCode: weatherCode ?? this.weatherCode,
+        temperatureEntity: temperatureEntity ?? this.temperatureEntity);
+  }
+
+  static getImage(WeatherCondition condition) {
+    return getWeatherConditionImage(condition);
+  }
 }
-}
+
 extension on int {
   WeatherCondition get toCondition {
     switch (this) {
@@ -90,6 +112,7 @@ extension on int {
       case 75:
       case 77:
       case 85:
+        return WeatherCondition.foggy;
       case 86:
         return WeatherCondition.snowy;
       default:
