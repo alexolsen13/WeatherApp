@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather/src/feauters/search/bloc/search_bloc.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_weather/src/feauters/search/data/search_repositroy.dart'
 import 'package:flutter_weather/src/feauters/search/widgets/search_screen.dart';
 import 'package:flutter_weather/src/feauters/weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/src/feauters/weather/data/models/models.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -83,7 +86,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
         }
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Weather App!"),
+            title:  Text(
+              "Weather App",
+              style: GoogleFonts.montserrat(
+                fontSize: 30,
+                fontWeight: FontWeight.w600
+              ),
+              ),
+            backgroundColor: Color.fromRGBO(255, 248, 201, 1),
             actions: [
               IconButton(
                   onPressed: () {
@@ -104,15 +114,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
             ],
           ),
           body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Image.network(
-              //     'https://upload.wikimedia.org/wikipedia/commons/0/01/Business_Centre_of_Moscow_2.jpg'),
-              weather != null ? Text(weather!.location) : const Text('No Data'),
-              weather != null
-                  ? Text(weather!.condition.name)
-                  : const Text('No Data'),
+              SizedBox(height: 100),
+              Container(
+                child:
+              weather != null ? Text(weather!.location,
+              style: GoogleFonts.montserrat(
+                fontSize: 40,
+                fontWeight: FontWeight.bold
+              )) : const Text('No Data'),),
+              Container(
+                child:
+              weather != null ? Text(weather!.condition.name,
+                  style: GoogleFonts.montserrat(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold
+                  )) : const Text('No Data'),),
+                  SizedBox(height: 200),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,22 +139,32 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: _colorSelecter(weather?.temperature ?? 10),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black87,
-                            spreadRadius: 4,
-                            blurRadius: 4,
-                          ),
-                        ]),
                     child: weather != null
                         ? Row(
                             children: [
-                              // Image.asset(_getWeatherIcon(
-                              //     weather?.condition.name ?? 'Clear')),
-                              Text(weather!.temperature.toString()),
+                              
+                              CachedNetworkImage(
+                                imageUrl: 'https://openweathermap.org/img/wn/${weather!.weatherCode}10d@2x.png',//тут исправить или убрать
+                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                imageBuilder: (context, ImageProvider) {
+                                  return Container(
+                                    height: 250,
+                                    width: 250,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: ImageProvider,
+                                        fit: BoxFit.fill)
+
+                                    ),
+                                  );
+                                },
+                                ),
+                              Text(weather!.temperature.toString()+'°',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 45,
+                                fontWeight: FontWeight.bold
+
+                              )),
                             ],
                           )
                         : const Text('No Data'),

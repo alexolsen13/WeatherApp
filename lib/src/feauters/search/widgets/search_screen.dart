@@ -59,6 +59,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: const Color.fromRGBO(255, 248, 201, 1),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(
@@ -86,7 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   searchBloc.add(SearchEventSearch(searchController.text));
                 },
                 icon: const Icon(
-                  Icons.search_off_outlined,
+                  Icons.search,
                 ),
               ),
             ],
