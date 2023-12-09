@@ -18,6 +18,8 @@ String getWeatherConditionImage(WeatherCondition condition) {
       return 'https://openweathermap.org/img/wn/09d@2x.png';
     case WeatherCondition.cloudy:
       return 'https://openweathermap.org/img/wn/03d.png';
+    case WeatherCondition.snowy:
+      return 'https://openweathermap.org/img/wn/13d.png';
     default:
       return 'https://openweathermap.org/img/wn/01d@2x.png';
   }

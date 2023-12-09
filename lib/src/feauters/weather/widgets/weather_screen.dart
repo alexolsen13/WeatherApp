@@ -60,7 +60,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               style: GoogleFonts.montserrat(
                   fontSize: 30, fontWeight: FontWeight.w600),
             ),
-            backgroundColor: const Color.fromRGBO(255, 248, 201, 1),
+            backgroundColor: const Color.fromRGBO(208, 162, 247, 1),
             actions: [
               IconButton(
                   onPressed: () {
@@ -110,6 +110,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         ? Row(
                             children: [
                               CachedNetworkImage(
+                                height: 150,
+                                width: 150,
                                 imageUrl: weatherConditionImage,
                                 // 'https://openweathermap.org/img/wn/${getWeatherCode(weather!)}d@2x.png', //тут исправить или убрать
                                 placeholder: (context, url) =>
@@ -129,7 +131,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 },
                               ),
                               Text(
-                                '${weather!.temperature}°',
+                                '${weather!.temperature.ceil()}°',
                                 style: GoogleFonts.montserrat(
                                   fontSize: 45,
                                   fontWeight: FontWeight.bold,

@@ -18,7 +18,7 @@ class _WeatherAppState extends State<WeatherApp> {
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(190, 173, 250, 1)
+        scaffoldBackgroundColor: const Color.fromRGBO(220, 191, 255, 1)
         ),
       home: BlocProvider(
         create: (context) => WeatherBloc(),

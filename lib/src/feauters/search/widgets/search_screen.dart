@@ -59,7 +59,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(255, 248, 201, 1),
+            backgroundColor: const Color.fromRGBO(208, 162, 247, 1),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(
