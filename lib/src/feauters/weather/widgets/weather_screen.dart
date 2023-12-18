@@ -19,7 +19,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   late WeatherBloc _weatherBloc;
 
-  String? temperature;
+  String temperature = '';
 
   Weather? weather;
 
@@ -47,6 +47,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         if (state is WeatherLoaded) {
           isLoading = false;
           weather = state.weatherData;
+          temperature = weather?.temperature.toString() ?? '';
           weatherConditionImage = Weather.getImage(weather!.condition);
           error = null;
         }
@@ -197,13 +198,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   );
                 },
               ),
-              Text(
-                '${weather!.temperature.ceil()}°',
-                style: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              weather != null
+                  ? Text(
+                      '${weather!.temperature.ceil()}°',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : const Text(''),
               // Дополнительные данные о погоде (температура, иконка и т.д.)
             ],
           ),
