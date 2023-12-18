@@ -19,6 +19,8 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   late WeatherBloc _weatherBloc;
 
+  String? temperature;
+
   Weather? weather;
 
   bool isLoading = false;
