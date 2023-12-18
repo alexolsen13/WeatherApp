@@ -89,14 +89,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ? Text(weather!.location,
                         style: GoogleFonts.montserrat(
                             fontSize: 40, fontWeight: FontWeight.bold))
-                    : const Text('No Data'),
+                    : const Text(''),
               ),
               Container(
                 child: weather != null
                     ? Text(weather!.condition.name,
                         style: GoogleFonts.montserrat(
                             fontSize: 19, fontWeight: FontWeight.bold))
-                    : const Text('No Data'),
+                    : const Text(''),
               ),
               const SizedBox(height: 200),
               Row(
@@ -139,11 +139,69 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               ),
                             ],
                           )
-                        : const Text('No Data'),
+                        : const Text(
+                          'Выберите город для просмотра погоды!'),
                   ),
                 ],
               ),
               error != null ? Text(error!) : const SizedBox.shrink(),
+              Expanded(
+                child: _buildHourlyWeather(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  Widget _buildHourlyWeather() {
+    // Здесь вам нужно создать и вернуть блок для отображения прогноза погоды по часам
+    // Например, ListView с горизонтальным скроллом
+
+    // Пример с ListView.builder для отображения данных
+    return ListView.builder(
+      scrollDirection: Axis.horizontal, // Горизонтальный скролл
+      itemCount: 24, // Для примера показываем данные на 24 часа
+      itemBuilder: (context, index) {
+        // Здесь нужно вернуть элементы погоды для каждого часа
+        return Container(
+          margin: EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Text(
+                '${index.toString().padLeft(2, '0')}:00',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.bold, 
+                ),), // Время
+                CachedNetworkImage(
+                                height: 50,
+                                width: 50,
+                                imageUrl: weatherConditionImage,
+                                // 'https://openweathermap.org/img/wn/${getWeatherCode(weather!)}d@2x.png', //тут исправить или убрать
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                imageBuilder: (BuildContext context,
+                                    ImageProvider imageProvider) {
+                                  return Container(
+                                    height: 250,
+                                    width: 250,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              Text(
+                                '${weather!.temperature.ceil()}°',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+              // Дополнительные данные о погоде (температура, иконка и т.д.)
             ],
           ),
         );
@@ -151,3 +209,5 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 }
+
+
