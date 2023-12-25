@@ -243,6 +243,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 }
+
 @override
 Widget build(BuildContext context) {
   return WeatherScene.sunset.sceneWidget;
