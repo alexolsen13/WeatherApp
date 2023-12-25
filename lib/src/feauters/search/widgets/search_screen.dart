@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   stepWidth: 100,
                   child: TextField(
                     decoration: const InputDecoration(
-                      label: Text('Find your desired city'),
+                      label: Text('Найдите желаемый город'),
                     ),
                     controller: searchController,
                     onSubmitted: (value) {

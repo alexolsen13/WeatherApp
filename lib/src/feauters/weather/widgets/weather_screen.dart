@@ -7,7 +7,10 @@ import 'package:flutter_weather/src/feauters/search/data/search_repositroy.dart'
 import 'package:flutter_weather/src/feauters/search/widgets/search_screen.dart';
 import 'package:flutter_weather/src/feauters/weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/src/feauters/weather/data/models/models.dart';
+import 'package:flutter_weather/src/feauters/weather/service/get_animation_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:weather_animation/weather_animation.dart';
+
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -34,6 +37,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     super.initState();
     _weatherBloc = BlocProvider.of<WeatherBloc>(context);
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +59,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           isLoading = false;
           error = state.error;
         }
+        
 
         return Scaffold(
           appBar: AppBar(
@@ -83,74 +88,97 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   icon: const Icon(Icons.search_outlined))
             ],
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 100),
-              Container(
-                child: weather != null
-                    ? Text(weather!.location,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 40, fontWeight: FontWeight.bold))
-                    : const Text(''),
-              ),
-              Container(
-                child: weather != null
-                    ? Text(weather!.condition.name,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 19, fontWeight: FontWeight.bold))
-                    : const Text(''),
-              ),
-              const SizedBox(height: 200),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.all(10),
-                    child: weather != null
-                        ? Row(
-                            children: [
-                              CachedNetworkImage(
-                                height: 150,
-                                width: 150,
-                                imageUrl: weatherConditionImage,
-                                // 'https://openweathermap.org/img/wn/${getWeatherCode(weather!)}d@2x.png', //тут исправить или убрать
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                imageBuilder: (BuildContext context,
-                                    ImageProvider imageProvider) {
-                                  return Container(
-                                    height: 250,
-                                    width: 250,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              Text(
-                                '${weather!.temperature.ceil()}°',
+          body: SizedBox(
+            height:MediaQuery.of(context).size.height,
+            width:MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
+                  clipBehavior: Clip.hardEdge,
+                  height:MediaQuery.of(context).size.height,
+            width:MediaQuery.of(context).size.width,
+                  child:
+                Column(
+                  children: [
+                    weather !=null?
+                    Expanded(
+                      child: getAnimationWidget(weather!.condition)
+                    ) : SizedBox.shrink(),
+                  ],
+                ),
+                ),
+                 Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 100),
+                      Container(
+                        child: weather != null
+                            ? Text(weather!.location,
                                 style: GoogleFonts.montserrat(
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          )
-                        : const Text('Выберите город для просмотра погоды!'),
+                                    fontSize: 40, fontWeight: FontWeight.bold))
+                            : const Text(''),
+                      ),
+                      Container(
+                        child: weather != null
+                            ? Text(weather!.condition.name,
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 19, fontWeight: FontWeight.bold))
+                            : const Text(''),
+                      ),
+                      const SizedBox(height: 200),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.all(10),
+                            child: weather != null
+                                ? Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                        height: 150,
+                                        width: 150,
+                                        imageUrl: weatherConditionImage,
+                                        // 'https://openweathermap.org/img/wn/${getWeatherCode(weather!)}d@2x.png', //тут исправить или убрать
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        imageBuilder: (BuildContext context,
+                                            ImageProvider imageProvider) {
+                                          return Container(
+                                            height: 250,
+                                            width: 250,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Text(
+                                        '${weather!.temperature.ceil()}°',
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 45,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Text('Выберите город для просмотра погоды!'),
+                          ),
+                        ],
+                      ),
+                      error != null ? Text(error!) : const SizedBox.shrink(),
+                      Expanded(
+                        child: _buildHourlyWeather(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              error != null ? Text(error!) : const SizedBox.shrink(),
-              Expanded(
-                child: _buildHourlyWeather(),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -214,4 +242,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
       },
     );
   }
+}
+@override
+Widget build(BuildContext context) {
+  return WeatherScene.sunset.sceneWidget;
 }
