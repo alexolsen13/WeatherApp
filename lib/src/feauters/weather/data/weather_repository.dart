@@ -13,12 +13,7 @@ class WeatherRepository {
       latitude: location.latitude,
       longitude: location.longitude,
     );
-    return Weather(
-        temperature: weather.temperature,
-        location: location.name,
-        condition: weather.weatherCode.toInt().toCondition,
-        weatherCode: weather.weatherCode,
-        temperatureEntity: Temperature.fromJson(weather.temperature));
+    return weather;
   }
 }
 

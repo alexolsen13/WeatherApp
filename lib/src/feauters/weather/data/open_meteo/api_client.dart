@@ -21,6 +21,7 @@ class OpenMeteoApiClient {
 
   /// Базовый URL для данных о погоде.
   static const _baseUrlWeather = 'api.open-meteo.com';
+
   /// Базовый URL для геокодирования.
   static const _baseUrlGeocoding = 'geocoding-api.open-meteo.com';
 
@@ -68,6 +69,8 @@ class OpenMeteoApiClient {
       'latitude': '$latitude',
       'longitude': '$longitude',
       'current_weather': 'true',
+      // 'hourly': 'temperature_2m',
+      'daily': ["weather_code", "temperature_2m_max"],
     });
 
     final weatherResponse = await _httpClient.get(weatherRequest);
@@ -80,6 +83,8 @@ class OpenMeteoApiClient {
     // Декодирование JSON-ответа о погоде.
     final bodyJson = jsonDecode(weatherResponse.body) as Map<String, dynamic>;
 
+    //
+    print(bodyJson.toString());
     // Проверка наличия ключа 'current_weather' в полученных данных.
     if (!bodyJson.containsKey('current_weather')) {
       throw WeatherNotFoundFailure();
@@ -87,7 +92,7 @@ class OpenMeteoApiClient {
 
     // Получение данных о погоде из JSON и их возврат.
     final weatherJson = bodyJson['current_weather'] as Map<String, dynamic>;
-
+    weatherJson['daily'] = bodyJson['daily'];
     return Weather.fromJson(weatherJson);
   }
 }
